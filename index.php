@@ -16,12 +16,18 @@
     </nav>
 
     <div class="container">
-        <div class="mb-4">
-            <h3>Add New User</h3>
-            <p class="text-muted">
-                Complete the form below
-            </p>
-            
+        <?php
+            if(isset($_GET['msg'])){
+                $msg = $_GET['msg'];
+                echo '<div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    '.$msg.'
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>';
+            }
+        ?>
+    </div>
             <div class="container">
                 <a href="add_new.php" class="btn btn-dark mb-4">ADD NEW</a>
 
@@ -33,40 +39,47 @@
                         <th scope="col">Last Name</th>
                         <th scope="col">Email</th>
                         <th scope="col">Gender</th>
+                        <th scope="col">Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                        <td></td>
-                        
-                        </tr>
-                        <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
+                        <?php
+                        include "db_conn.php";
+                            $sql = "SELECT * FROM crud";
 
-                        <td></td>
-                    </tr>
-                        <tr>
-                        <th scope="row">3</th>
-                        <td>Larry</td>
-                        <td>the Bird</td>
-                        <td>@twitter</td>
-                        <td></td>    
-                    </tr>
+                            
+                            $result = mysqli_query($conn, $sql);
+                            if($result){
+                            while($row = mysqli_fetch_assoc($result)){
+                                ?>
+                                <tr>
+                                    <td><?php echo $row['id']; ?></td>
+                                    <td><?php echo $row['first_name'] ?></td>
+                                    <td><?php echo $row['last_name'] ?></td>
+                                    <td><?php echo $row['email'] ?></td>
+                                    <td><?php echo $row['gender'] ?></td>
+                                    <td>
+                                    <a href="edit.php?id=<?php echo $row['id']; ?>" class="link-dark"><i class="fa-solid fa-pen-to-square fs-5 me-3"></i></a>
+                                    <a href="delete.php?id=<?php echo $row['id']; ?>" class="link-dark" onclick="return confirm('Are you sure you want to delete this record?');"><i class="fa-solid fa-trash fs-5"></i></a>
+
+                                    </td>
+                                </tr>
+
+
+                                <?php
+                            }
+                            } else {
+                                echo "Error: " . mysqli_error($conn);
+                            }
+                        ?>
+                        </tr>
                     </tbody>
                 </table>
             </div>
             </div>
 
             
-        </div>
-    </div>
+        
     <!-- bootstrap script -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
