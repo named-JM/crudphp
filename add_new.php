@@ -6,6 +6,17 @@
         $last_name = $_POST['last_name'];
         $email = $_POST['email'];
         $gender = $_POST['gender'];
+
+        $sql = "INSERT INTO `crud`(`id`, `first_name`, `last_name`, `email`, `gender`) VALUES (NULL,'$first_name','$last_name','$email','$gender')";
+    
+        $result = mysqli_query($conn, $sql);
+
+        if($result){
+            header("Location: index.php?msg=New record created successfully");
+        }
+        else {
+            echo "Failed: " . mysqli_error($conn);
+        }
     }
 ?>
 
@@ -51,7 +62,7 @@
 
                     <div class="col mb-3">
                         <label for="" class="form-label">Email</label>
-                        <input type="email" class="form-control" name="first_name" placeholder="Enter your Email">
+                        <input type="email" class="form-control" name="email" placeholder="Enter your Email">
                     </div>
 
                     <div class="form-group mb-3">
